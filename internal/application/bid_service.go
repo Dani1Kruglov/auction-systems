@@ -1,10 +1,11 @@
 package application
 
 import (
-	"auction-systems/internal/domain"
-	"auction-systems/internal/domain/repositories"
 	"errors"
 	"fmt"
+
+	"auction-systems/internal/domain"
+	"auction-systems/internal/domain/repositories"
 )
 
 type BidService struct {

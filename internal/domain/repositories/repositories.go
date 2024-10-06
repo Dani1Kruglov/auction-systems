@@ -1,9 +1,10 @@
 package repositories
 
 import (
+	"database/sql"
+
 	"auction-systems/internal/domain"
 	"auction-systems/internal/infrastructure"
-	"database/sql"
 )
 
 type IUserRepository interface {

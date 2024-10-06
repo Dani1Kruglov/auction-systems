@@ -1,10 +1,11 @@
 package infrastructure
 
 import (
-	"auction-systems/internal/domain"
 	"database/sql"
 	"errors"
 	"time"
+
+	"auction-systems/internal/domain"
 )
 
 type BidRepository struct {

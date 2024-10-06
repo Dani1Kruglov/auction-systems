@@ -1,13 +1,15 @@
 package grpc
 
 import (
+	"context"
+	"time"
+
 	"auction-systems/api/protobufs"
 	"auction-systems/internal/application"
 	"auction-systems/internal/domain"
 	"auction-systems/traits"
-	"context"
+
 	"go.uber.org/zap"
-	"time"
 )
 
 type AuctionHandler struct {

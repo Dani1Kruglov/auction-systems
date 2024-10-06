@@ -1,9 +1,10 @@
 package infrastructure
 
 import (
-	"auction-systems/internal/domain"
 	"database/sql"
 	"fmt"
+
+	"auction-systems/internal/domain"
 )
 
 type AuctionRepository struct {

@@ -1,14 +1,16 @@
 package application
 
 import (
+	"errors"
+	"fmt"
+	"net/http"
+	"time"
+
 	"auction-systems/internal/domain"
 	"auction-systems/internal/domain/repositories"
 	"auction-systems/traits"
-	"errors"
-	"fmt"
+
 	"go.uber.org/zap"
-	"net/http"
-	"time"
 )
 
 type AuctionService struct {
@@ -34,7 +36,6 @@ func (as *AuctionService) AuctionsListener() {
 	}
 
 	for _, auction := range activeAuctions {
-
 		go func(auction *domain.Auction) { as.AuctionSchedule(auction) }(auction)
 	}
 

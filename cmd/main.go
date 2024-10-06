@@ -1,6 +1,10 @@
 package main
 
 import (
+	"context"
+	"fmt"
+	"net/http"
+
 	"auction-systems/api/protobufs"
 	"auction-systems/config"
 	"auction-systems/internal/application"
@@ -8,11 +12,9 @@ import (
 	g "auction-systems/internal/interfaces/grpc"
 	"auction-systems/pkg/database"
 	"auction-systems/pkg/logger"
-	"context"
-	"fmt"
+
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 var envFile = ".env"

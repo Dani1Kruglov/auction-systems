@@ -1,9 +1,10 @@
 package infrastructure
 
 import (
-	"auction-systems/internal/domain"
 	"database/sql"
 	"errors"
+
+	"auction-systems/internal/domain"
 )
 
 type LotRepository struct {

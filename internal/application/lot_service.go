@@ -1,9 +1,10 @@
 package application
 
 import (
+	"fmt"
+
 	"auction-systems/internal/domain"
 	"auction-systems/internal/domain/repositories"
-	"fmt"
 )
 
 type LotService struct {

@@ -1,12 +1,14 @@
 package infrastructure
 
 import (
-	"auction-systems/internal/domain"
 	"database/sql"
 	"errors"
 	"fmt"
-	_ "github.com/lib/pq"
 	"time"
+
+	"auction-systems/internal/domain"
+
+	_ "github.com/lib/pq"
 )
 
 type UserRepository struct {

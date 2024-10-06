@@ -1,10 +1,11 @@
 package database
 
 import (
-	"auction-systems/config"
 	"database/sql"
 	"fmt"
 	"time"
+
+	"auction-systems/config"
 
 	_ "github.com/lib/pq"
 	"go.uber.org/zap"

@@ -1,9 +1,10 @@
 package application
 
 import (
+	"errors"
+
 	"auction-systems/internal/domain"
 	"auction-systems/internal/domain/repositories"
-	"errors"
 )
 
 type UserService struct {

@@ -1,9 +1,10 @@
 package application
 
 import (
+	"go.uber.org/zap"
+
 	"auction-systems/internal/domain"
 	"auction-systems/internal/domain/repositories"
-	"go.uber.org/zap"
 )
 
 type IUserService interface {
