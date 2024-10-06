@@ -1,0 +1,97 @@
+syntax = "proto3";
+
+package auction;
+
+import "api/google/api/annotations.proto";
+
+option go_package = "api/protobufs;protobufs";
+
+service AuctionService {
+  rpc CreateLot (CreateLotRequest) returns (CreateLotResponse) {
+    option (google.api.http) = {
+      post: "/v1/lots/create"
+      body: "*"
+    };
+  }
+
+  rpc AddBalance (AddBalanceRequest) returns (AddBalanceResponse) {
+    option (google.api.http) = {
+      post: "/v1/users/{user_id}/balance"
+      body: "*"
+    };
+  }
+
+  rpc CreateAuction (CreateAuctionRequest) returns (CreateAuctionResponse) {
+    option (google.api.http) = {
+      post: "/v1/auctions/create"
+      body: "*"
+    };
+  }
+
+  rpc PlaceBid (PlaceBidRequest) returns (PlaceBidResponse) {
+    option (google.api.http) = {
+      post: "/v1/auctions/{auction_id}/bids"
+      body: "*"
+    };
+  }
+
+  rpc RegisterClient (RegisterClientRequest) returns (RegisterClientResponse) {
+    option (google.api.http) = {
+      post: "/v1/users/register"
+      body: "*"
+    };
+  }
+}
+
+message AddBalanceRequest {
+  double user_id = 1;
+  double amount = 2;
+}
+
+message AddBalanceResponse {
+  bool success = 1;
+}
+
+message CreateLotRequest {
+  double seller_id = 1;
+  string item_name = 2;
+  string description = 3;
+  double starting_price = 4;
+}
+
+message CreateLotResponse {
+  double lot_id = 1;
+}
+
+message CreateAuctionRequest {
+  double lot_id = 1;
+  double min_step = 2;
+  string start_time = 3;
+  string end_time = 4;
+}
+
+message CreateAuctionResponse {
+  double auction_id = 1;
+}
+
+message PlaceBidRequest {
+  double auction_id = 1;
+  double buyer_id = 2;
+  double bid_amount = 3;
+}
+
+message PlaceBidResponse {
+  bool success = 1;
+}
+
+message RegisterClientRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+  string role = 4;
+  string notification_url = 5;
+}
+
+message RegisterClientResponse {
+  bool success = 1;
+}

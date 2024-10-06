@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  postgres-db:
+    container_name: postgres-db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: auction
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: 12345678
+    networks:
+      - auction-network
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./../build/pgsql_db_data:/docker-entrypoint-initdb.d
+    command: ["postgres", "-c", "max_connections=300"]
+
+  auction:
+    build:
+      context: ../
+      dockerfile: build/Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-db
+    networks:
+      - auction-network
+
+networks:
+  auction-network:
+
+volumes:
+  db:
