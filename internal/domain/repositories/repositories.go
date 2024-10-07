@@ -25,7 +25,8 @@ type ILotRepository interface {
 
 type IBidRepository interface {
 	GetBidsByAuctionId(auctionId int) ([]*domain.Bid, *domain.Bid, error)
-	GetBidByUserIdAndAuctionId(userId, auctionId int, amount float64) (bool, error)
+	UpdateBid(bid *domain.Bid) error
+	GetBidByUserIdAndAuctionId(userId, auctionId int) (*domain.Bid, error)
 	AddBid(bid *domain.Bid) error
 }
 
@@ -34,7 +35,7 @@ type IAuctionRepository interface {
 	GetActiveAuctionById(auctionId int) (*domain.Auction, error)
 	Create(auction *domain.Auction) (int, error)
 	UpdateStatus(auctionId int, newStatus string) error
-	UpdateWinnerId(auctionId int, winnerId int) error
+	UpdateWinnerIdAndMaxBid(auctionId int, winnerId int, maxBid float64) error
 }
 
 type Repositories struct {

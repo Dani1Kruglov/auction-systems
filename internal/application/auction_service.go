@@ -110,11 +110,6 @@ func (as *AuctionService) AuctionSchedule(auction *domain.Auction) {
 						as.logger.Fatal("error get max bid from repository", zap.Error(err))
 					}
 
-					err = as.repo.AuctionRepository.UpdateWinnerId(auction.Id, maxBid.BuyerId)
-					if err != nil {
-						as.logger.Fatal("error update auction winner id", zap.Error(err))
-					}
-
 					if buyer, exists := buyers[maxBid.BuyerId]; exists {
 						err = traits.SendNotification(buyer.NotificationUrl, traits.Response{
 							Status:      "notification",

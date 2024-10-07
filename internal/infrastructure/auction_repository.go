@@ -17,8 +17,8 @@ func NewAuctionRepository(db *sql.DB) *AuctionRepository {
 
 func (ar *AuctionRepository) GetActiveAuctionById(auctionId int) (*domain.Auction, error) {
 	var auction domain.Auction
-	err := ar.db.QueryRow(`SELECT id, lot_id, status, min_step FROM auctions WHERE id = $1 AND status = 'open'`, auctionId).
-		Scan(&auction.Id, &auction.LotID, &auction.Status, &auction.MinStep)
+	err := ar.db.QueryRow(`SELECT a.id, a.lot_id, a.status, a.max_bid, a.min_step, l.starting_price FROM auctions a JOIN lots l ON a.lot_id = l.id WHERE a.id = $1 AND a.status = 'open';`, auctionId).
+		Scan(&auction.Id, &auction.LotID, &auction.Status, &auction.MaxBid, &auction.MinStep, &auction.Lot.StartingBid)
 	if err != nil {
 		return nil, err
 	}
@@ -66,9 +66,9 @@ func (ar *AuctionRepository) UpdateStatus(auctionId int, newStatus string) error
 	return nil
 }
 
-func (ar *AuctionRepository) UpdateWinnerId(auctionId int, winnerId int) error {
+func (ar *AuctionRepository) UpdateWinnerIdAndMaxBid(auctionId int, winnerId int, maxBid float64) error {
 
-	_, err := ar.db.Exec(`UPDATE auctions SET winner_id = $1, updated_at = CURRENT_TIMESTAMP WHERE id = $2`, winnerId, auctionId)
+	_, err := ar.db.Exec(`UPDATE auctions SET winner_id = $1, max_bid = $2, updated_at = CURRENT_TIMESTAMP WHERE id = $3 AND $2 > max_bid;`, winnerId, maxBid, auctionId)
 	if err != nil {
 		return fmt.Errorf("failed to update auction winner id: %w", err)
 	}

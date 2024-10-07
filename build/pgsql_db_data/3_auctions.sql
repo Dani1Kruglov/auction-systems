@@ -25,6 +25,7 @@ CREATE TABLE public.auctions (
                                  lot_id integer UNIQUE REFERENCES public.lots(id) ON DELETE CASCADE, -- Связь с лотом (один лот - один аукцион)
                                  winner_id integer REFERENCES public.users(id) ON DELETE SET NULL, -- Победитель аукциона
                                  status character varying(50) NOT NULL, -- Статус аукциона (например, 'open', 'closed', 'wait')
+                                 max_bid numeric(12, 2) DEFAULT 0.0,
                                  min_step numeric(12, 2) NOT NULL,
                                  start_time timestamp without time zone NOT NULL, -- Время начала аукциона
                                  end_time timestamp without time zone NOT NULL, -- Время окончания аукциона

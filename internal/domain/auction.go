@@ -10,7 +10,9 @@ type Auction struct {
 	LotID     int       `json:"lot_id"`
 	WinnerID  int       `json:"winner_id"`
 	Status    string    `json:"status"`
+	MaxBid    float64   `json:"max_bid"`
 	MinStep   float64   `json:"min_step"`
+	Lot       Lot       `json:"lot"`
 	StartTime time.Time `json:"start_time"`
 	EndTime   time.Time `json:"end_time"`
 	CreatedAt time.Time `json:"created_at"`

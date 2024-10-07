@@ -37,20 +37,41 @@ func (bs *BidService) PlaceBid(bid *domain.Bid) error {
 		return fmt.Errorf("failed to get active auction by ID %d: %w", bid.AuctionId, err)
 	}
 
-	if auction.MinStep > bid.Amount {
-		return errors.New("the minimum step is too low")
-	}
-
-	exists, err := bs.repo.BidRepository.GetBidByUserIdAndAuctionId(bid.BuyerId, bid.AuctionId, bid.Amount)
+	existsBid, err := bs.repo.BidRepository.GetBidByUserIdAndAuctionId(bid.BuyerId, bid.AuctionId)
 	if err != nil {
 		return fmt.Errorf("failed to check if bid exists for user ID %d in auction ID %d: %w", bid.BuyerId, bid.AuctionId, err)
 	}
 
-	if !exists {
+	var newBid float64
+
+	if existsBid != nil {
+		existsBid.Amount = existsBid.Amount + bid.Amount
+		if existsBid.Amount-auction.MaxBid < auction.MinStep {
+			return errors.New("bid is too low")
+		}
+		newBid = existsBid.Amount
+		err = bs.repo.BidRepository.UpdateBid(existsBid)
+
+	} else {
+		if auction.MaxBid != 0 {
+			if bid.Amount < auction.MaxBid+auction.MinStep {
+				return errors.New("bid is too low")
+			}
+		} else {
+			if bid.Amount < auction.Lot.StartingBid {
+				return errors.New("bid is too low")
+			}
+		}
+		newBid = bid.Amount
 		err = bs.repo.BidRepository.AddBid(bid)
 		if err != nil {
 			return fmt.Errorf("failed to add bid for user ID %d in auction ID %d: %w", bid.BuyerId, bid.AuctionId, err)
 		}
+	}
+
+	err = bs.repo.AuctionRepository.UpdateWinnerIdAndMaxBid(auction.Id, bid.BuyerId, newBid)
+	if err != nil {
+		return fmt.Errorf("failed to update auction max bid on user Id %d: %w", bid.BuyerId, err)
 	}
 
 	_, err = bs.repo.UserRepository.UpdateUserBalance(bid.BuyerId, bid.Amount, domain.MinusSymbol)

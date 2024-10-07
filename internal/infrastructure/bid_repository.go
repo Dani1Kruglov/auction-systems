@@ -16,25 +16,30 @@ func NewBidRepository(db *sql.DB) *BidRepository {
 	return &BidRepository{db: db}
 }
 
-func (br *BidRepository) GetBidByUserIdAndAuctionId(userId, auctionId int, amount float64) (bool, error) {
+func (br *BidRepository) GetBidByUserIdAndAuctionId(userId, auctionId int) (*domain.Bid, error) {
 	var bid domain.Bid
 
 	err := br.db.QueryRow(`SELECT id, user_id, auction_id, bid_amount FROM bids WHERE user_id = $1 AND auction_id = $2;`, userId, auctionId).
 		Scan(&bid.Id, &bid.BuyerId, &bid.AuctionId, &bid.Amount)
 	if err != nil && !errors.Is(err, sql.ErrNoRows) {
-		return false, err
+		return nil, err
 	}
 
 	if bid.Id != 0 {
-		_, err = br.db.Exec(`UPDATE bids SET bid_amount = $2, updated_at = $3 WHERE id = $1`,
-			bid.Id, bid.Amount+amount, time.Now())
-		if err != nil {
-			return false, err
-		}
-		return true, nil
+		return &bid, nil
 	}
 
-	return false, nil
+	return nil, nil
+}
+
+func (br *BidRepository) UpdateBid(bid *domain.Bid) error {
+	_, err := br.db.Exec(`UPDATE bids SET bid_amount = $2, updated_at = $3 WHERE id = $1`,
+		bid.Id, bid.Amount, time.Now())
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (br *BidRepository) GetBidsByAuctionId(auctionId int) ([]*domain.Bid, *domain.Bid, error) {
