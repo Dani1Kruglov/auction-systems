@@ -68,7 +68,7 @@ curl --location 'http://localhost:8080/v1/auctions/create' \
 ```
 
 ### Подача ставки
-Подача ставки на аукцион:
+Подача ставки на аукцион (если ставка у пользователя была, эта ставка суммируется с суммой прошлых ставок (если хотим сделать ставку 500, а было 200 до этого, нужно добавить 300 в запрос)):
 ```bash
 curl --location 'http://localhost:8080/v1/auctions/4/bids' \
 --header 'Content-Type: application/json' \
